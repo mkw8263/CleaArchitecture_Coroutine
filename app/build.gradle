@@ -1,0 +1,30 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-kapt'
+apply from: '../android_commons.gradle'
+android {
+    defaultConfig {
+        applicationId ApplicationId.id
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    dataBinding {
+        enabled true
+    }
+}
+
+dependencies {
+    implementation project(Modules.domain)
+    implementation project(Modules.presentation)
+    implementation project(Modules.data)
+
+    implementation Libraries.dagger
+    implementation Libraries.daggerAndroid
+    implementation Libraries.daggerAndroidSupport
+    kapt Libraries.daggerCompiler
+    kapt Libraries.daggerProcessor
+
+    implementation Libraries.retrofitCoroutineAdapter
+    implementation Libraries.gson
+    implementation Libraries.retrofit
+    implementation Libraries.retrofitGsonConverter
+    implementation Libraries.httpLoggingInterceptor
+}
