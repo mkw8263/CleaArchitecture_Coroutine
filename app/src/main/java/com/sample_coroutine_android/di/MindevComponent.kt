@@ -4,27 +4,20 @@ import com.sample_coroutine_android.MinDevApplication
 import com.sample_coroutine_android.di.module.ActivityBindingModule
 import com.sample_coroutine_android.di.module.NetWorkModule
 import com.sample_coroutine_android.di.module.ViewModelBindingModule
-import dagger.BindsInstance
+import com.sample_coroutine_android.di.module.ViewModelFactoryBindModule
+import com.sample_coroutine_android.di.qualifier.PerApplication
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
-import javax.inject.Singleton
 
-@Singleton
+@PerApplication
 @Component(
     modules = [
         AndroidSupportInjectionModule::class,
         NetWorkModule::class,
         ViewModelBindingModule::class,
+        ViewModelFactoryBindModule::class,
         ActivityBindingModule::class]
 )
 interface MindevComponent {
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        fun application(app: MinDevApplication): Builder
-
-        fun build(): MindevComponent
-    }
-
     fun inject(app: MinDevApplication)
 }

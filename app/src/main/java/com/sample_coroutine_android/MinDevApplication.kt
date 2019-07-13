@@ -18,7 +18,8 @@ class MinDevApplication : Application(), HasActivityInjector {
     override fun onCreate() {
         super.onCreate()
         DaggerMindevComponent.builder()
-            .application(this)
             .build()
+            .inject(this)
+
     }
 }

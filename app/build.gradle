@@ -15,6 +15,7 @@ dependencies {
     implementation project(Modules.domain)
     implementation project(Modules.presentation)
     implementation project(Modules.data)
+    implementation project(Modules.common)
 
     implementation Libraries.dagger
     implementation Libraries.daggerAndroid
