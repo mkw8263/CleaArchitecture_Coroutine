@@ -1,5 +1,5 @@
 object ApplicationId {
-    val id = "com.toast.android"
+    val id = "com.sample_coroutine_android"
 }
 
 object Modules {
@@ -7,7 +7,7 @@ object Modules {
     val domain = ":domain"
     val presentation = ":presentation"
     val data = ":data"
-    val commoon = ":common"
+    val common = ":common"
     val commonTest = ":common_test"
 
     val local = ":data:local"

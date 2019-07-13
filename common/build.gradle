@@ -1,0 +1,14 @@
+apply plugin: 'com.android.library'
+apply from: '../android_commons.gradle'
+apply from: '../android_core_dependencies.gradle'
+android {
+    defaultConfig {
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+}
+
+dependencies {
+
+}
