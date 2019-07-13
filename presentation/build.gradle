@@ -18,6 +18,8 @@ android {
 }
 
 dependencies {
+    implementation project(Modules.common)
+
     implementation Libraries.dagger
     implementation Libraries.daggerAndroid
     implementation Libraries.daggerAndroidSupport

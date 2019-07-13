@@ -1,9 +1,8 @@
 package com.mindev.presentation.ui.main
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import com.common.createViewModel
 import com.mindev.presentation.MinDevActivity
 import com.mindev.presentation.R
 import com.mindev.presentation.databinding.ActivityMainBinding
@@ -14,12 +13,12 @@ class MainActivity : MinDevActivity<ActivityMainBinding>() {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
-    override val viewModel: ViewModel =
-        ViewModelProviders.of(this, factory)[MainActivityViewModel::class.java]
+
+    private val viewModel by lazy { createViewModel(factory, MainActivityViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 
+        viewModel.test()
     }
 }
