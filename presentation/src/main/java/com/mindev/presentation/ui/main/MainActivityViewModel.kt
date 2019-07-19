@@ -3,6 +3,7 @@ package com.mindev.presentation.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.common.Result
 import com.mindev.domain.entity.DomainEntity
 import com.mindev.domain.news.NewsUseCase
 import com.mindev.presentation.MinDevViewModel
@@ -40,11 +41,23 @@ class MainActivityViewModel
             // 병렬 호출을 위헤 이런식으로 설계 진행...
             val second = async { newsUseCase.execute(NewsUseCase.Params(10)) }
 
-            first.await().toMutableList().apply {
-                addAll(count(), second.await())
-            }.also {
-                _isLoading.postValue(false)
-                _resultStateLive.postValue(ResultState.NewsList(it))
+            val totalResult = Pair(first.await(), second.await())
+            _isLoading.postValue(false)
+
+            totalResult.let {
+                if (it.first is Result.Success && it.second is Result.Success) {
+                    val firstResponse =
+                        (it.first as Result.Success<List<DomainEntity.NewsInfo>>).value
+                    val secondResponse =
+                        (it.second as Result.Success<List<DomainEntity.NewsInfo>>).value
+                    firstResponse.toMutableList().apply {
+                        addAll(count(), secondResponse)
+                    }.also {
+                        _resultStateLive.postValue(ResultState.NewsList(it))
+                    }
+                } else {
+                    _resultStateLive.postValue(ResultState.ToastMessage((it.first as Result.Error).error.message.orEmpty()))
+                }
             }
         }
     }
