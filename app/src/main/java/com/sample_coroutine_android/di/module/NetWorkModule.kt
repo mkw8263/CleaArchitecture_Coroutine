@@ -61,7 +61,7 @@ class NetWorkModule {
         gson: Gson
     ): MindevService {
         return Retrofit.Builder()
-            .baseUrl(context.getString(R.string.abc_action_bar_home_description))
+            .baseUrl(context.getString(R.string.base_url))
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())

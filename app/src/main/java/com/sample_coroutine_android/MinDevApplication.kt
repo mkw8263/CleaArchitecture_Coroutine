@@ -3,6 +3,7 @@ package com.sample_coroutine_android
 import android.app.Activity
 import android.app.Application
 import com.sample_coroutine_android.di.DaggerMindevComponent
+import com.sample_coroutine_android.di.module.AppModule
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -18,6 +19,7 @@ class MinDevApplication : Application(), HasActivityInjector {
     override fun onCreate() {
         super.onCreate()
         DaggerMindevComponent.builder()
+            .appModule(AppModule(this))
             .build()
             .inject(this)
 

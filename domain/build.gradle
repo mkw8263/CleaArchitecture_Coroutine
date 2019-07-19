@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply from: '../android_commons.gradle'
 apply from: '../android_core_dependencies.gradle'
+apply plugin: 'kotlin-kapt'
 android {
     defaultConfig {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -14,4 +15,16 @@ android {
 dependencies {
     implementation project(Modules.data)
     implementation project(Modules.common)
+    
+    implementation Libraries.retrofitCoroutineAdapter
+    implementation Libraries.gson
+    implementation Libraries.retrofit
+    implementation Libraries.retrofitGsonConverter
+    implementation Libraries.httpLoggingInterceptor
+
+    implementation Libraries.dagger
+    implementation Libraries.daggerAndroid
+    implementation Libraries.daggerAndroidSupport
+    kapt Libraries.daggerCompiler
+    kapt Libraries.daggerProcessor
 }
