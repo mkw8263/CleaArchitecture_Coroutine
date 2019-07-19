@@ -39,11 +39,13 @@ class MainActivityViewModel
             val first = async { newsUseCase.execute(NewsUseCase.Params(1)) }
             // 병렬 호출을 위헤 이런식으로 설계 진행...
             val second = async { newsUseCase.execute(NewsUseCase.Params(10)) }
-            val items = first.await().toMutableList().apply {
+
+            first.await().toMutableList().apply {
                 addAll(count(), second.await())
+            }.also {
+                _isLoading.postValue(false)
+                _resultStateLive.postValue(ResultState.NewsList(it))
             }
-            _isLoading.postValue(false)
-            _resultStateLive.postValue(ResultState.NewsList(items))
         }
     }
 }
