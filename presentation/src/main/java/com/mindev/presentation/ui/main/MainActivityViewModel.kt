@@ -30,7 +30,7 @@ class MainActivityViewModel
 
 
     fun getNewsInfo(input: String) {
-        if (input == "") {
+        if (input.isEmpty()) {
             _resultStateLive.postValue(ResultState.ToastMessage("입력해주세요."))
             return
         }
