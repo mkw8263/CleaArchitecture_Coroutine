@@ -29,7 +29,7 @@ class MainActivityViewModel
     val isLoading: LiveData<Boolean> get() = _isLoading
 
 
-    fun getDelivery(input: String) {
+    fun getNewsInfo(input: String) {
         if (input == "") {
             _resultStateLive.postValue(ResultState.ToastMessage("입력해주세요."))
             return
@@ -43,8 +43,7 @@ class MainActivityViewModel
             val totalResult = Pair(first.await(), second.await())
             _isLoading.postValue(false)
 
-            totalResult.let {
-                it.takeIf { it.first is Result.Success && it.second is Result.Success }
+            totalResult.takeIf { it.first is Result.Success && it.second is Result.Success }
                     ?.let { totalRequest ->
                         val firstResponse =
                             (totalRequest.first as Result.Success<List<DomainEntity.NewsInfo>>).value
@@ -56,8 +55,7 @@ class MainActivityViewModel
                             _resultStateLive.postValue(ResultState.NewsList(it))
                         }
                     } ?: run {
-                    _resultStateLive.postValue(ResultState.ToastMessage((it.first as Result.Error).error.message.orEmpty()))
-                }
+                _resultStateLive.postValue(ResultState.ToastMessage((totalResult.first as Result.Error).error.message.orEmpty()))
             }
         }
     }

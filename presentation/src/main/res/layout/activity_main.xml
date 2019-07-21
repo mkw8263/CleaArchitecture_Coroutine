@@ -30,7 +30,7 @@
             android:id="@+id/et_input"
             android:layout_width="0dp"
             android:background="@null"
-            android:hint="1 + 3 = ? 정답을 입력 해주세요."
+            android:hint="1 + 2 = ? 정답을 입력 해주세요."
             android:layout_height="wrap_content"
             android:inputType="text"
             app:layout_constraintLeft_toLeftOf="parent"

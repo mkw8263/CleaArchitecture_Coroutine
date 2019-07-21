@@ -44,7 +44,7 @@ class MainActivity : MinDevActivity<ActivityMainBinding>() {
 
     fun onClick(view: View) {
         when (view.id) {
-            R.id.btn_ok -> viewModel.getDelivery(et_input.text.toString())
+            R.id.btn_ok -> viewModel.getNewsInfo(et_input.text.toString())
         }
     }
 }
