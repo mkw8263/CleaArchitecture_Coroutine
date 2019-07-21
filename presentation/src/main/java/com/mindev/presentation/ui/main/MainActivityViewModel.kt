@@ -38,24 +38,24 @@ class MainActivityViewModel
             _isLoading.postValue(true)
             // 병렬 호출을 위한 async 호출
             val first = async { newsUseCase.execute(NewsUseCase.Params(1)) }
-            // 병렬 호출을 위헤 이런식으로 설계 진행...
             val second = async { newsUseCase.execute(NewsUseCase.Params(10)) }
 
             val totalResult = Pair(first.await(), second.await())
             _isLoading.postValue(false)
 
             totalResult.let {
-                if (it.first is Result.Success && it.second is Result.Success) {
-                    val firstResponse =
-                        (it.first as Result.Success<List<DomainEntity.NewsInfo>>).value
-                    val secondResponse =
-                        (it.second as Result.Success<List<DomainEntity.NewsInfo>>).value
-                    firstResponse.toMutableList().apply {
-                        addAll(count(), secondResponse)
-                    }.also {
-                        _resultStateLive.postValue(ResultState.NewsList(it))
-                    }
-                } else {
+                it.takeIf { it.first is Result.Success && it.second is Result.Success }
+                    ?.let { totalRequest ->
+                        val firstResponse =
+                            (totalRequest.first as Result.Success<List<DomainEntity.NewsInfo>>).value
+                        val secondResponse =
+                            (totalRequest.second as Result.Success<List<DomainEntity.NewsInfo>>).value
+                        firstResponse.toMutableList().apply {
+                            addAll(count(), secondResponse)
+                        }.also {
+                            _resultStateLive.postValue(ResultState.NewsList(it))
+                        }
+                    } ?: run {
                     _resultStateLive.postValue(ResultState.ToastMessage((it.first as Result.Error).error.message.orEmpty()))
                 }
             }
