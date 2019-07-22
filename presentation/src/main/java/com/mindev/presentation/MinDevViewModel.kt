@@ -1,19 +1,12 @@
 package com.mindev.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import java.io.IOException
+import kotlin.coroutines.CoroutineContext
 
-open class MinDevViewModel : ViewModel() {
+abstract class MinDevViewModel : ViewModel() {
 
-    val errorHandler = CoroutineExceptionHandler { _, exception ->
-        when (exception) {
-            is IOException -> Log.e("network error", "error !!")
-        }
-    }
+    val errorHandler = CoroutineExceptionHandler(::errorListener)
 
-    override fun onCleared() {
-        super.onCleared()
-    }
+    abstract fun errorListener(coroutineContext: CoroutineContext, message: Throwable)
 }

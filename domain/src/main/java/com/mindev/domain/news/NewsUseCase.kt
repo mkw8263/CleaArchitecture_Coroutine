@@ -17,8 +17,8 @@ class NewsUseCase @Inject constructor(
         return try {
             val request = repo.getNewsAsync(params?.id ?: 0)
             Result.Success(newsMapper.mapFromEntity(request.await()))
-        } catch (e: Exception) {
-            Result.Error(IOException("network error"))
+        } catch (e: IOException) {
+            Result.Error(e)
         }
     }
 

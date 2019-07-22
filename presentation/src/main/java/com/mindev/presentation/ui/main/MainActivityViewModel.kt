@@ -3,14 +3,15 @@ package com.mindev.presentation.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.common.ErrorMessage
 import com.common.Result
 import com.mindev.domain.entity.DomainEntity
 import com.mindev.domain.news.NewsUseCase
 import com.mindev.presentation.MinDevViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class MainActivityViewModel
 @Inject constructor(private val newsUseCase: NewsUseCase) : MinDevViewModel() {
@@ -28,35 +29,22 @@ class MainActivityViewModel
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
+    // not used
+    override fun errorListener(coroutineContext: CoroutineContext, message: Throwable) {
+        // sample errorListener
+    }
 
     fun getNewsInfo(input: String) {
         if (input.isEmpty()) {
-            _resultStateLive.postValue(ResultState.ToastMessage("입력해주세요."))
+            _resultStateLive.postValue(ResultState.ToastMessage(ErrorMessage.ERROR_EMPTY_INPUT))
             return
         }
         viewModelScope.launch(Dispatchers.Default + errorHandler) {
             _isLoading.postValue(true)
-            // 병렬 호출을 위한 async 호출
-            val first = async { newsUseCase.execute(NewsUseCase.Params(1)) }
-            val second = async { newsUseCase.execute(NewsUseCase.Params(10)) }
-
-            val totalResult = Pair(first.await(), second.await())
+            val request = newsUseCase.execute(NewsUseCase.Params(1))
             _isLoading.postValue(false)
-
-            totalResult.takeIf { it.first is Result.Success && it.second is Result.Success }
-                    ?.let { totalRequest ->
-                        val firstResponse =
-                            (totalRequest.first as Result.Success<List<DomainEntity.NewsInfo>>).value
-                        val secondResponse =
-                            (totalRequest.second as Result.Success<List<DomainEntity.NewsInfo>>).value
-                        firstResponse.toMutableList().apply {
-                            addAll(count(), secondResponse)
-                        }.also {
-                            _resultStateLive.postValue(ResultState.NewsList(it))
-                        }
-                    } ?: run {
-                _resultStateLive.postValue(ResultState.ToastMessage((totalResult.first as Result.Error).error.message.orEmpty()))
-            }
+            if (request is Result.Success) _resultStateLive.postValue(ResultState.NewsList(request.value))
+            else _resultStateLive.postValue(ResultState.ToastMessage(ErrorMessage.ERROR_NETWORK))
         }
     }
 }

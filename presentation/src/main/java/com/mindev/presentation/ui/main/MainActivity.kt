@@ -30,8 +30,7 @@ class MainActivity : MinDevActivity<ActivityMainBinding>() {
     private fun resultState(result: MainActivityViewModel.ResultState) {
         when (result) {
             is MainActivityViewModel.ResultState.ToastMessage -> toast(result.message)
-            is MainActivityViewModel.ResultState.NewsList -> rv.adapter =
-                NewsAdapter(result.items)
+            is MainActivityViewModel.ResultState.NewsList -> rv.adapter = NewsAdapter(result.items)
         }
     }
 
