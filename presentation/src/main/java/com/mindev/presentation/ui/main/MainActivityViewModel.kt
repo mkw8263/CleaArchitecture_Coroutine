@@ -21,8 +21,6 @@ class MainActivityViewModel
         data class NewsList(val items: List<DomainEntity.NewsInfo>) : ResultState()
     }
 
-    val inputValueOB = MutableLiveData<String>()
-
     private val _resultStateLive = MutableLiveData<ResultState>()
     val resultStateLive: LiveData<ResultState> get() = _resultStateLive
 
@@ -34,18 +32,12 @@ class MainActivityViewModel
         // sample errorListener
     }
 
-    fun getNewsInfo(input: String) {
-        if (input.isEmpty()) {
-            _resultStateLive.postValue(ResultState.ToastMessage(ErrorMessage.ERROR_EMPTY_INPUT))
-            return
-        }
-        viewModelScope.launch(Dispatchers.Default + errorHandler) {
-            _isLoading.postValue(true)
-            val request = newsUseCase.execute(NewsUseCase.Params(1))
-            _isLoading.postValue(false)
-            if (request is Result.Success) _resultStateLive.postValue(ResultState.NewsList(request.value))
-            else _resultStateLive.postValue(ResultState.ToastMessage(ErrorMessage.ERROR_NETWORK))
-        }
+    fun getNewsInfo() = viewModelScope.launch(Dispatchers.Default + errorHandler) {
+        _isLoading.postValue(true)
+        val request = newsUseCase.execute(NewsUseCase.Params(1))
+        _isLoading.postValue(false)
+        if (request is Result.Success) _resultStateLive.postValue(ResultState.NewsList(request.value))
+        else _resultStateLive.postValue(ResultState.ToastMessage(ErrorMessage.ERROR_NETWORK))
     }
 }
 

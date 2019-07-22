@@ -1,7 +1,6 @@
 package com.mindev.presentation.ui.main
 
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.common.createViewModel
 import com.common.ob
@@ -23,7 +22,7 @@ class MainActivity : MinDevActivity<ActivityMainBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        viewModel.getNewsInfo()
         ob(viewModel.resultStateLive, ::resultState)
     }
 
@@ -38,12 +37,6 @@ class MainActivity : MinDevActivity<ActivityMainBinding>() {
         viewDataBinding.apply {
             mainViewModel = viewModel
             lifecycleOwner = this@MainActivity
-        }
-    }
-
-    fun onClick(view: View) {
-        when (view.id) {
-            R.id.btn_ok -> viewModel.getNewsInfo(et_input.text.toString())
         }
     }
 }
